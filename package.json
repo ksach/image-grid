@@ -1,0 +1,15 @@
+{
+  "name": "image-grid",
+  "description": "Grid of images given an array of image URLs. Drag and drop to reorder.",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server client",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kiran Sachdev",
+  "license": "none",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  }
+}
