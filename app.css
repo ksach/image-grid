@@ -1,0 +1,33 @@
+body {
+	color: #333;
+	padding: 10px;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 24px;
+}
+
+.grid {
+	width: 100%;
+	padding: 1px;
+	background: #ddd;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.box {
+	margin: 1px;
+	padding: 2px;
+	font-size: 18px;
+	flex: 1;
+	align-self: stretch;
+	height: 250px;
+	min-width: 250px;
+	border: 2px solid #ddd;
+}
+
+.highlight {
+	border: 2px solid limegreen;
+}
