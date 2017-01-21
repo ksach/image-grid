@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	var grid = document.querySelector('.grid');
 	var data = ['images/1.png',
 		'images/2.png',
@@ -12,7 +12,7 @@
 		'images/10.png',
 		'images/11.png',
 		'images/12.png'
-		];
+	];
 	var boxes = initializeGrid(grid, data);
 	initializeEventListeners();
 
@@ -39,17 +39,12 @@
 				x: node.offsetLeft,
 				y: node.offsetTop,
 				node: node,
-				rank: i,
 				imageUrl: data[i],
 				id: i
 			};
-			if (i > 0) {
-				box.previous = boxes[i-1];
-				box.previous.next = box;
-			}
 			boxes.push(box);
-		} 
-		return boxes;
+		}
+		return ksLinkedList.linkedListFromArray(boxes);
 	}
 
 	function allowDrop(ev) {
@@ -77,103 +72,64 @@
 		ev.target.style.opacity = 0.7;
 	}
 
+	function endDrag(ev) {
+		ev.preventDefault();
+		ev.target.style.opacity = 1;
+	}
+
 	function drop(ev) {
 		ev.preventDefault();
 		if (ev.target.className === 'box highlight') {
 			ev.target.className = 'box';
 			var dragBox = boxes[ev.dataTransfer.getData('id')];
 			var targetBox = boxes[ev.target.id];
-			moveBox(dragBox, targetBox);
-			dropDragBox(dragBox, ev);
+			var movedBoxes = ksLinkedList.moveItem(dragBox, targetBox);
+			updateFlexboxOrder(movedBoxes, dragBox);
+			animateBoxPositions(movedBoxes);
+			animateDrop(dragBox, ev);
 		}
 	}
 
-	function endDrag(ev) {
-		ev.preventDefault();
-		ev.target.style.opacity = 1;
-	}
-
-	function moveBox(dragBox, targetBox) {
-		var movedBoxes = [];
-		var nextBox, previousBox;
-		var direction, nextKey, previousKey;
-
-		if (dragBox.rank === targetBox.rank) {
-			return;
+	function updateFlexboxOrder(movedBoxes, dragBox) {
+		var i;
+		for (i = 0; i < movedBoxes.length; i++) {
+			movedBoxes[i].node.style.order = movedBoxes[i].rank;
 		}
-
-		if (dragBox.rank < targetBox.rank) {
-			direction = -1;
-			nextKey = 'next';
-			previousKey = 'previous';
-		} else {
-			direction = 1;
-			nextKey = 'previous';
-			previousKey = 'next';
-		}
-
-		nextBox = dragBox[nextKey];
-		previousBox = dragBox[previousKey];
-		nextBox[previousKey] = previousBox;
-		if (previousBox) {
-			previousBox[nextKey] = nextBox;
-		}
-		while (true) {
-			nextBox.rank += direction;
-			nextBox.node.style.order = nextBox.rank;
-			movedBoxes.push(nextBox);
-			if (nextBox.id === targetBox.id) {
-				break;
-			}
-			nextBox = nextBox[nextKey];
-		}
-		dragBox.rank = targetBox.rank - direction;
 		dragBox.node.style.order = dragBox.rank;
-		dragBox[nextKey] = targetBox[nextKey];
-		dragBox[previousKey] = targetBox;
-		if (dragBox[nextKey]) {
-			dragBox[nextKey][previousKey] = dragBox;
-		}
-		targetBox[nextKey] = dragBox;
-		
-		updateBoxPositions(movedBoxes);
 	}
 
-	function dropDragBox(dragBox, ev) {
-		var lastX = ev.pageX - ev.dataTransfer.getData('offsetX');
-		var lastY = ev.pageY - ev.dataTransfer.getData('offsetY');
-			
+	function animateDrop(dragBox, ev) {
+		var start = {
+			x: ev.pageX - ev.dataTransfer.getData('offsetX'),
+			y: ev.pageY - ev.dataTransfer.getData('offsetY')
+		}
+		var duration = 500;
+		ksAnimate.animateFrom(dragBox.node, start, duration);
 		dragBox.x = dragBox.node.offsetLeft;
 		dragBox.y = dragBox.node.offsetTop;
-
-		var start = {x: lastX - dragBox.x, y: lastY - dragBox.y};  
-		ksAnimate.animatedTranslate(dragBox.node, start, {x: 0, y: 0}, 500);
 	}
 
-	function updateBoxPositions(movedBoxes) {
-		var i;
-		for (i = 0; i < movedBoxes.length; i++) {			
-			var box = movedBoxes[i];
-				
-			var lastX = box.x;
-			var lastY = box.y;
-			
-			box.x = box.node.offsetLeft;
-			box.y = box.node.offsetTop;
+	function animateBoxPositions(movedBoxes) {
+		var i, box, start, end;
 
-			if (lastX === box.x && lastY === box.y) continue;
-
-			if (lastY < box.y) {
-				lastX = box.x - box.node.clientWidth;
-				lastY = box.y;
-			} else if (lastY > box.y) {
-				lastX = box.x + box.node.clientWidth;
-				lastY = box.y;
+		for (i = 0; i < movedBoxes.length; i++) {
+			box = movedBoxes[i];
+			start = { x: box.x, y: box.y };
+			end = { x: box.node.offsetLeft, y: box.node.offsetTop };
+			if (start.x === end.x && start.y === end.y) {
+				continue;
 			}
-			
-			var start = {x: lastX - box.x, y: lastY - box.y};  
-
-			ksAnimate.animatedTranslate(box.node, start, {x: 0, y: 0}, 800);
+			if (start.y < end.y) {
+				start.x = end.x - box.node.clientWidth;
+				start.y = end.y;
+			} else if (start.y > end.y) {
+				start.x = end.x + box.node.clientWidth;
+				start.y = end.y;
+			}
+			var duration = 800;
+			ksAnimate.animateFrom(box.node, start, duration);
+			box.x = end.x;
+			box.y = end.y;
 		}
 	}
 })();
