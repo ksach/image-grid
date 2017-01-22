@@ -1,10 +1,11 @@
 (function () {
 	var grid = document.querySelector('.grid');
 	var boxes;
-	
-	ksDataLoader.loadData('./image-urls.json', function(response) {
+
+	ksDataLoader.loadData('./vegetables.json', function(response) {
 		var data = JSON.parse(response).imageUrls;
 		boxes = initializeGrid(grid, data);
+		ksLazyLoader.setBoxes(boxes);
 		initializeEventListeners();
 	}, function(error) { console.log(error)});	
 
@@ -24,7 +25,7 @@
 			node = document.createElement('div');
 			node.className = 'box';
 			node.setAttribute('id', i);
-			node.setAttribute('style', 'background: gray no-repeat center url("' + data[i] + '"); background-size: contain; order: ' + i);
+			node.setAttribute('style', 'background: gray; order: ' + i);
 			node.setAttribute('draggable', 'true');
 			node = container.appendChild(node);
 			box = {
@@ -32,6 +33,7 @@
 				y: node.offsetTop,
 				node: node,
 				imageUrl: data[i],
+				imageLoaded: false,
 				id: i
 			};
 			boxes.push(box);
@@ -79,6 +81,7 @@
 			updateFlexboxOrder(movedBoxes, dragBox);
 			animateBoxPositions(movedBoxes);
 			animateDrop(dragBox, ev);
+			ksLazyLoader.updateMovedBoxes(movedBoxes);
 		}
 	}
 
