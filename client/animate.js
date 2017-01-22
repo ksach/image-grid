@@ -3,7 +3,7 @@ var ksAnimate = (function () {
 
 	function animateTick(node, start, end, delta) {
 		var next = { x: start.x + delta.x, y: start.y + delta.y };
-		if (delta.x * next.x < delta.x * end.x) {
+		if (delta.x * next.x < delta.x * end.x || delta.y * next.y < delta.y * end.y) {
 			node.style.transform = 'translate(' + next.x + 'px, ' + next.y + 'px)';
 			setTimeout(function () {
 				animateTick(node, next, end, delta);

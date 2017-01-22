@@ -114,12 +114,14 @@
 			if (start.x === end.x && start.y === end.y) {
 				continue;
 			}
-			if (start.y < end.y) {
-				start.x = end.x - box.node.clientWidth;
-				start.y = end.y;
-			} else if (start.y > end.y) {
-				start.x = end.x + box.node.clientWidth;
-				start.y = end.y;
+			if (start.x !== end.x) {
+				if (start.y < end.y) {
+					start.x = end.x - box.node.clientWidth;
+					start.y = end.y;
+				} else if (start.y > end.y) {
+					start.x = end.x + box.node.clientWidth;
+					start.y = end.y;
+				}
 			}
 			var duration = 800;
 			ksAnimate.animateFrom(box.node, start, duration);
