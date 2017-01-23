@@ -8,6 +8,7 @@
 		boxes = initializeGrid(grid, data);
 		ksLazyLoader.setBoxes(boxes);
 		initializeEventListeners();
+		setTimeout(getInitialBoxPositions, 0);
 	}, function(error) { console.log(error)});	
 
 	function initializeEventListeners() {
@@ -30,8 +31,6 @@
 			node.setAttribute('draggable', 'true');
 			node = container.appendChild(node);
 			box = {
-				x: node.offsetLeft,
-				y: node.offsetTop,
 				node: node,
 				imageUrl: data[i],
 				imageLoaded: false,
@@ -40,6 +39,14 @@
 			boxes.push(box);
 		}
 		return ksLinkedList.linkedListFromArray(boxes);
+	}
+
+	function getInitialBoxPositions() {
+		var i;
+		for (i = 0; i < boxes.length; i++) {
+			boxes[i].x = boxes[i].node.offsetLeft;
+			boxes[i].y = boxes[i].node.offsetTop;
+		}
 	}
 
 	function allowDrop(ev) {
@@ -99,10 +106,10 @@
 			x: ev.pageX - ev.dataTransfer.getData('offsetX'),
 			y: ev.pageY - ev.dataTransfer.getData('offsetY')
 		}
-		var duration = 500;
-		ksAnimate.animateFrom(dragBox.node, start, duration);
 		dragBox.x = dragBox.node.offsetLeft;
 		dragBox.y = dragBox.node.offsetTop;
+		var duration = 500;
+		ksAnimate.animateFrom(dragBox.node, start, duration);
 	}
 
 	function animateBoxPositions(movedBoxes) {
@@ -112,6 +119,8 @@
 			box = movedBoxes[i];
 			start = { x: box.x, y: box.y };
 			end = { x: box.node.offsetLeft, y: box.node.offsetTop };
+			box.x = end.x;
+			box.y = end.y;
 			if (start.x === end.x && start.y === end.y) {
 				continue;
 			}
@@ -126,8 +135,6 @@
 			}
 			var duration = 800;
 			ksAnimate.animateFrom(box.node, start, duration);
-			box.x = end.x;
-			box.y = end.y;
 		}
 	}
 })();
