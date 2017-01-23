@@ -9,7 +9,6 @@ h1 {
 }
 
 .grid {
-	/*width: 100%;*/
 	padding: 1px;
 	background: #ddd;
 	display: flex;
