@@ -1,19 +1,20 @@
 var ksDataLoader = (function () {
-	
+	var service = {};
+
 	function get(url, callback, error) {
 		var request = new XMLHttpRequest();
 		request.open('GET', url, true);
 		request.addEventListener('load', function() {
-			callback(request.responseText)
+			callback(request.responseText);
 		});
 		request.addEventListener('error', function() {
-			error(request.statusText)
+			error(request.statusText);
 		});
 		request.send();
 	}
-	 
-	return {
-		loadData: get
-	};
 	
+	service.loadData = get;
+
+	return service;
+		
 })();

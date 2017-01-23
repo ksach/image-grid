@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "http-server client",
-    "test": "grunt karma:prod"
+    "test": "grunt jshint --force karma:prod"
   },
   "author": "Kiran Sachdev",
   "license": "none",
@@ -15,6 +15,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
     "grunt-karma": "^2.0.0",
     "karma": "^1.4.0",
     "karma-chai": "^0.1.0",

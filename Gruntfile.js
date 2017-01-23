@@ -23,8 +23,8 @@ module.exports = function(grunt) {
                     'node_modules/chai/chai.js',
                     'node_modules/sinon-chai/lib/sinon-chai.js',
                     'node_modules/sinon/pkg/sinon.js',
-                    'client/linked-list.js',
-                    'client/linked-list.spec.js'
+                    'client/services/linked-list.js',
+                    'test/linked-list.spec.js'
                 ]
             },
 
@@ -39,6 +39,9 @@ module.exports = function(grunt) {
                 singleRun: true,
                 browsers: ['PhantomJS']
             }
+        },
+        jshint: {
+            uses_defaults: ['client/**/*.js', 'test/**/*.js']
         }
     });
 

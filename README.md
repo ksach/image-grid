@@ -7,13 +7,13 @@ A grid of images given an array of image URLs. Drag and drop to reorder.
 ## Running the app locally
 
 ```
-npm install
+npm install --prod
 npm start
 ```
 Point your browser to [http://localhost:8080/](http://localhost:8080/)
 
 To change the list of image urls go to /client/app.js and change the json file name in line 5.
-For the original sample set use image-urls.json
+For the original sample set use ./data/image-urls.json
 
 ## Browser Compatibility
 
@@ -47,6 +47,7 @@ but left it for interest.
 
 Tests can be run with
 ```
+npm install --dev
 npm test
 ```
 I have written a test suite for the KSLinkedList class. For a production app I would do full test coverage.

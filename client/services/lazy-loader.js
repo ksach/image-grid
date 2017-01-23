@@ -1,4 +1,6 @@
 var ksLazyLoader = (function () {
+	var service = {};
+
 	var boxes = [];
 	var boxesByRank = {};
 	var scrollTop, scrollHeight, scrollFraction, documentHeight;
@@ -81,14 +83,15 @@ var ksLazyLoader = (function () {
 		scrollFraction = scrollTop / (scrollHeight - documentHeight);
 	}
 	 
-	return {
-		setBoxes: function(inputBoxes) {
-			boxes = inputBoxes;
-			numLoaded = 0;
-			updateBoxesByRank(boxes);
-			loadImagesInView();
-		},
-		updateMovedBoxes: updateBoxesByRank
+	service.setBoxes = function(inputBoxes) {
+		boxes = inputBoxes;
+		numLoaded = 0;
+		updateBoxesByRank(boxes);
+		loadImagesInView();
 	};
+
+	service.updateMovedBoxes = updateBoxesByRank;
+	
+	return service;
 	
 })();
