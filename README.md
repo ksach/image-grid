@@ -42,3 +42,11 @@ There is also a second indexing by position (the order an image appears in the g
 the images for lazy loading in constant time. After implementing indexing by position for the purposes of lazy loading,
 I could have gone back and removed the linked list structure without sacrificing time complexity,
 but left it for interest.
+
+## Test Coverage
+
+Tests can be run with
+```
+npm test
+```
+I have written a test suite for the KSLinkedList class. For a production app I would do full test coverage.

@@ -1,6 +1,7 @@
 (function () {
 	var grid = document.querySelector('.grid');
 	var boxes;
+	var ksLinkedList = new KSLinkedList();
 
 	ksDataLoader.loadData('./vegetables.json', function(response) {
 		var data = JSON.parse(response).imageUrls;
